@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { Menu } from "lucide-react";
+import { Menu, X } from "lucide-react";
+import { useState } from "react";
 import logoImage from "@/assets/aquarq-logo.jpg";
 import { whatsappLink } from "@/lib/aquarq";
 
@@ -27,6 +28,8 @@ export function LogoMark({ variant = "default" }: { variant?: "default" | "light
 }
 
 export function SiteHeader() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   return (
     <header className="fixed inset-x-0 top-0 z-40 border-b border-border/70 bg-background/86 backdrop-blur-xl">
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
@@ -65,8 +68,58 @@ export function SiteHeader() {
         >
           WhatsApp
         </a>
-        <Menu className="h-6 w-6 text-foreground md:hidden" aria-hidden="true" />
+        <button
+          type="button"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="md:hidden p-2 rounded-md hover:bg-muted/50 transition"
+          aria-label="Abrir menú"
+        >
+          {mobileMenuOpen ? (
+            <X className="h-6 w-6 text-foreground" />
+          ) : (
+            <Menu className="h-6 w-6 text-foreground" />
+          )}
+        </button>
       </nav>
+      {mobileMenuOpen && (
+        <div className="md:hidden border-t border-border/70 bg-background/95 backdrop-blur-xl">
+          <div className="px-4 py-4 space-y-3 sm:px-6">
+            <Link
+              to="/"
+              activeOptions={{ exact: true }}
+              activeProps={{ className: "text-foreground" }}
+              className="block text-sm font-semibold text-muted-foreground transition hover:text-foreground"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Inicio
+            </Link>
+            <Link
+              to="/obras"
+              activeProps={{ className: "text-foreground" }}
+              className="block text-sm font-semibold text-muted-foreground transition hover:text-foreground"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Obras
+            </Link>
+            <Link
+              to="/contacto"
+              activeProps={{ className: "text-foreground" }}
+              className="block text-sm font-semibold text-muted-foreground transition hover:text-foreground"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Contacto
+            </Link>
+            <a
+              href={whatsappLink("Hola AQUARQ, quiero solicitar un presupuesto.")}
+              target="_blank"
+              rel="noreferrer"
+              className="block rounded-full bg-sun px-5 py-2.5 text-sm font-black text-sun-foreground shadow-soft transition hover:-translate-y-0.5 text-center"
+            >
+              WhatsApp
+            </a>
+          </div>
+        </div>
+      )}
     </header>
   );
 }
